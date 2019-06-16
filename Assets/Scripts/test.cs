@@ -13,6 +13,11 @@ public class test : MonoBehaviour
     }
 
 
+    public void Connect()
+    {
+        NetManager.Connect("127.0.0.1", 8888);
+    }
+
     void initWall()
     {
         for(int i = -5; i <= 5; i++)
