@@ -6,6 +6,9 @@ public class test : MonoBehaviour
 {
     void Start()
     {
+        GameObject player = new GameObject("play1");
+        CtrlSnake ctrlSnake = player.AddComponent<CtrlSnake>();
+        ctrlSnake.init();
         initWall();
     }
 
