@@ -21,6 +21,7 @@ public class BaseSnake : MonoBehaviour{
     public void init()
     {
         snakeHead = Instantiate(Resources.Load("Prefabs/BlueSnake", typeof(GameObject)), new Vector3(0, 1, 0), Quaternion.identity, null) as GameObject;
+        snakeHead.transform.parent = this.transform;//使得其父物体为自身
         snake = new List<GameObject>();
         snake.Add(snakeHead);
         isDead = false;
@@ -70,12 +71,10 @@ public class BaseSnake : MonoBehaviour{
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("yess");
         if (other.gameObject.tag == "food")
         {
-            isEat = true;
-            Destroy(other.gameObject);
-            generateFood();
-            Debug.Log(this.gameObject.name + " isEat " + isEat);
+
         }
         else if(other.gameObject.tag == "wall")
         {
@@ -84,6 +83,13 @@ public class BaseSnake : MonoBehaviour{
         }
     }
 
+    public void Eat(GameObject other)
+    {
+        isEat = true;
+        Destroy(other.gameObject);
+        generateFood();
+        Debug.Log(this.gameObject.name + " isEat " + isEat);
+    }
     public void grow()
     {
         if (isDead)
