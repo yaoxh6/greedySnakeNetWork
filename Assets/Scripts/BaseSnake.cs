@@ -17,17 +17,25 @@ public class BaseSnake : MonoBehaviour{
     public bool isEat;
     private Vector3 newBodyPos;
     private Vector3 lastHeadPos;
-
-    public void init()
+    public int randomID;
+    void Start()
     {
-        snakeHead = Instantiate(Resources.Load("Prefabs/BlueSnake", typeof(GameObject)), new Vector3(0, 1, 0), Quaternion.identity, null) as GameObject;
+     //   randomID = (int)Random.Range(-4, 4);
+    }
+
+    public void init(int randomID)
+    {
+    //    Debug.Log("@@@" + randomID);
+        this.randomID = randomID;
+        snakeHead = Instantiate(Resources.Load("Prefabs/BlueSnake", typeof(GameObject)), new Vector3(randomID, 1, randomID), Quaternion.identity, null) as GameObject;
         snakeHead.transform.parent = this.transform;//使得其父物体为自身
         snake = new List<GameObject>();
         snake.Add(snakeHead);
         isDead = false;
         isEat = false;
-        newBodyPos = new Vector3(0, 1, 0);
-        lastHeadPos = new Vector3(0, 1, 0);
+   
+        newBodyPos = new Vector3(randomID, 1, randomID);
+        lastHeadPos = new Vector3(randomID, 1, randomID);
     }
 
     public void move(Direction inputDirection)
@@ -86,8 +94,9 @@ public class BaseSnake : MonoBehaviour{
     public void Eat(GameObject other)
     {
         isEat = true;
-        Destroy(other.gameObject);
-        generateFood();
+        //   Destroy(other.gameObject);
+        //   generateFood();
+        SendFood();//报告新的食物
         Debug.Log(this.gameObject.name + " isEat " + isEat);
     }
     public void grow()
@@ -101,10 +110,24 @@ public class BaseSnake : MonoBehaviour{
         snake.Add(snakeBodyTemp);
     }
 
-    private void generateFood()
+    public void generateFood(Vector3Int newPos)
     {
         Debug.Log("InMove " + isDead + isEat);
-        Vector3 newPos = new Vector3((int)Random.Range(-4, 4), 1, (int)Random.Range(-4, 4));
+        foreach(var i in GameObject.FindGameObjectsWithTag("food"))
+        {
+            Destroy(i);//毁掉上一个食物
+        }
+
         GameObject tmpFood = Instantiate(Resources.Load("Prefabs/Food", typeof(GameObject)), newPos, Quaternion.identity, null) as GameObject;
+
+    }
+    public void SendFood()
+    {
+        MsgFood food = new MsgFood();
+        Vector3Int newPos = new Vector3Int((int)Random.Range(-4, 4), 1, (int)Random.Range(-4, 4));
+        food.x = newPos.x;
+        food.y = newPos.y;
+        food.z = newPos.z;
+        NetManager.Send(food);//向服务器发送这条消息
     }
 }
