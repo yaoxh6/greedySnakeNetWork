@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
+    public CtrlSnake con;
     void Start()
     {
         GameObject player = new GameObject("play1");
         CtrlSnake ctrlSnake = player.AddComponent<CtrlSnake>();
         ctrlSnake.init();
+        con = ctrlSnake;
         initWall();
     }
 
