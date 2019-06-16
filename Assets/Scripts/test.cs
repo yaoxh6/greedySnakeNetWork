@@ -20,6 +20,15 @@ public class test : MonoBehaviour
         NetManager.Connect("127.0.0.1", 8888);
     }
 
+    public void SendData()
+    {
+        MsgMove test = new MsgMove();
+        test.x = 4;
+        test.y = 2;
+        test.z = 3;
+        NetManager.Send(test);
+
+    }
     void initWall()
     {
         for(int i = -5; i <= 5; i++)
